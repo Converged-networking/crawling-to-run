@@ -44,6 +44,14 @@ Spine has the lower IP of the prefix
 | wan1a  | wan1b  | Ethernet 3  | Ethernet 4  | 10.0.1.0/31 | 10.0.2.0/31   |
 | leaf1a | leaf1b | Ethernet 3  | Ethernet 4  | 10.0.1.2/31 | 10.0.2.2/31   |
 
+**Clients:**
+
+| Name     | access mode   | Vlan | IP        |
+| -------- | ------------- | ---- | --------- |
+| client1  | Single access | 11   | 10.0.11.5 |
+| client2  | LACP access   | 12   | 10.0.12.5 |
+| client 3 | Single acces  | 13   | 10.0.13.5 |
+
 
 To spin up a lab with EOS switches we're using Containerlab.
 
