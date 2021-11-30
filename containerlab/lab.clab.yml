@@ -1,0 +1,97 @@
+---
+name: walk
+
+topology:
+
+  kinds:
+    ceos:
+      image: ceos:4.25
+    linux:
+      image: ghcr.io/hellt/network-multitool
+
+  nodes:
+
+    gw1:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.5
+      startup-config: startup-configs/gw1.cfg
+      labels:
+        ansible-group: gw
+
+    spine1:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.6
+      startup-config: startup-configs/spine1.cfg
+      labels:
+        ansible-group: spine
+    spine2:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.7
+      startup-config: startup-configs/spine2.cfg
+      labels:
+        ansible-group: spine
+
+    wan1a:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.11
+      startup-config: startup-configs/wan1a.cfg
+      labels:
+        ansible-group: ocs1
+    wan1b:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.12
+      startup-config: startup-configs/wan1b.cfg
+      labels:
+        ansible-group: ocs1
+
+    leaf1a:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.21
+      startup-config: startup-configs/leaf1a.cfg
+      labels:
+        ansible-group: leafs
+    leaf1b:
+      kind: ceos
+      mgmt_ipv4: 172.20.20.22
+      startup-config: startup-configs/leaf1b.cfg
+      labels:
+        ansible-group: leafs
+
+    # Clients
+    client1:
+      kind: linux
+    client2:
+      kind: linux
+    client3:
+      kind: linux
+
+  links:
+    # wan1a
+    - endpoints: ["spine1:eth1", "wan1a:eth1"]
+    - endpoints: ["spine2:eth1", "wan1a:eth2"]
+    # wan1b
+    - endpoints: ["spine1:eth2", "wan1b:eth1"]
+    - endpoints: ["spine2:eth2", "wan1b:eth2"]
+    # Peer links ocs1
+    - endpoints: ["wan1a:eth3", "wan1b:eth3"]
+    - endpoints: ["wan1a:eth4", "wan1b:eth4"]
+    # leaf1a
+    - endpoints: ["spine1:eth3", "leaf1a:eth1"]
+    - endpoints: ["spine2:eth3", "leaf1a:eth2"]
+    # leaf1b
+    - endpoints: ["spine1:eth4", "leaf1b:eth1"]
+    - endpoints: ["spine2:eth4", "leaf1b:eth2"]
+    # Peer links leaf1
+    - endpoints: ["leaf1a:eth3", "leaf1b:eth3"]
+    - endpoints: ["leaf1a:eth4", "leaf1b:eth4"]
+
+    # gw1
+    - endpoints: ["gw1:eth1", "wan1a:eth5"]
+    - endpoints: ["gw1:eth2", "wan1b:eth5"]
+
+
+    # Clients
+    - endpoints: ["client1:eth1", "leaf1a:eth5"]
+    - endpoints: ["client2:eth1", "leaf1a:eth6"]
+    - endpoints: ["client2:eth2", "leaf1b:eth6"]
+    - endpoints: ["client3:eth1", "leaf1b:eth5"]
