@@ -1,0 +1,9 @@
+---
+
+- name: Create temporary output directory
+  ansible.builtin.file:
+    path: "{{ tmp_hostdir }}"
+    state: directory
+
+- include_tasks: eos.yml
+  when: ansible_network_os == 'arista.eos.eos'

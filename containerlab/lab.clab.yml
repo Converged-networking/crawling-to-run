@@ -5,7 +5,7 @@ topology:
 
   kinds:
     ceos:
-      image: ceos:4.25
+      image: ceos:4.26
     linux:
       image: ghcr.io/hellt/network-multitool
 
@@ -36,26 +36,26 @@ topology:
       mgmt_ipv4: 172.20.20.11
       startup-config: startup-configs/wan1a.cfg
       labels:
-        ansible-group: ocs1
+        ansible-group: leaf
     wan1b:
       kind: ceos
       mgmt_ipv4: 172.20.20.12
       startup-config: startup-configs/wan1b.cfg
       labels:
-        ansible-group: ocs1
+        ansible-group: leaf
 
     leaf1a:
       kind: ceos
       mgmt_ipv4: 172.20.20.21
       startup-config: startup-configs/leaf1a.cfg
       labels:
-        ansible-group: leafs
+        ansible-group: leaf
     leaf1b:
       kind: ceos
       mgmt_ipv4: 172.20.20.22
       startup-config: startup-configs/leaf1b.cfg
       labels:
-        ansible-group: leafs
+        ansible-group: leaf
 
     # Clients
     client1:

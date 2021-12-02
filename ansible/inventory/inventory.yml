@@ -1,0 +1,46 @@
+all:
+  children:
+    ceos:
+      hosts:
+        clab-walk-gw1:
+          ansible_host: 172.20.20.5
+        clab-walk-leaf1a:
+          ansible_host: 172.20.20.21
+        clab-walk-leaf1b:
+          ansible_host: 172.20.20.22
+        clab-walk-spine1:
+          ansible_host: 172.20.20.6
+        clab-walk-spine2:
+          ansible_host: 172.20.20.7
+        clab-walk-wan1a:
+          ansible_host: 172.20.20.11
+        clab-walk-wan1b:
+          ansible_host: 172.20.20.12
+    linux:
+      hosts:
+        clab-walk-client1:
+          ansible_host: 172.20.20.3
+        clab-walk-client2:
+          ansible_host: 172.20.20.4
+        clab-walk-client3:
+          ansible_host: 172.20.20.2
+    gw:
+      hosts:
+        clab-walk-gw1:
+          ansible_host: 172.20.20.5
+    leaf:
+      hosts:
+        clab-walk-leaf1a:
+          ansible_host: 172.20.20.21
+        clab-walk-leaf1b:
+          ansible_host: 172.20.20.22
+        clab-walk-wan1a:
+          ansible_host: 172.20.20.11
+        clab-walk-wan1b:
+          ansible_host: 172.20.20.12
+    spine:
+      hosts:
+        clab-walk-spine1:
+          ansible_host: 172.20.20.6
+        clab-walk-spine2:
+          ansible_host: 172.20.20.7

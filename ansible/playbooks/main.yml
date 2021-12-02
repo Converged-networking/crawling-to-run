@@ -1,0 +1,9 @@
+---
+- name: Run project
+  hosts: ceos
+
+  collections:
+    - arista.avd
+
+  roles:
+    - collect_facts
