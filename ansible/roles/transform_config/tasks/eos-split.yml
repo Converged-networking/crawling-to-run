@@ -1,0 +1,70 @@
+---
+
+- name: Create output directory
+  ansible.builtin.file:
+    path: "{{ split_config_dir }}"
+    state: directory
+
+- name: Initialize working config 
+  copy:
+    src: "{{ src_config }}"
+    dest: "{{ working_config }}"
+  delegate_to: localhost
+
+- name: Seperate endpoint config
+  block:
+    - name: Extract endpoints from working config
+      copy:
+        content: "{{ lookup('file', working_config) | regex_findall(endpoint_regex, multiline=True) | join('\n') }}"
+        dest: "{{ endpoint_cfg }}"
+      delegate_to: localhost
+
+    - name: Remove endpoints from working config
+      replace:
+        path: "{{ working_config }}"
+        regexp: "{{ endpoint_regex }}"
+        replace: ""
+      delegate_to: localhost
+
+- name: Seperate management config
+  block:
+    - name: Extract management config from working config
+      copy:
+        content: "{{ lookup('file', working_config) | regex_findall(mgmt_config_regex, multiline=True) | join('\n') }}"
+        dest: "{{ mgmt_cfg }}"
+      delegate_to: localhost
+
+    - name: Remove management config from working config
+      replace:
+        path: "{{ working_config }}"
+        regexp: "{{ mgmt_config_regex }}"
+        replace: ""
+      delegate_to: localhost
+
+# - name: Seperate core config
+#   block:
+#     - name: Extract core links from working config
+#       copy:
+#         content: "{{ lookup('file', working_config) | regex_findall(core_links_regex, multiline=True) | join('\n') }}"
+#         dest: "{{ split_config_dir }}/core.cfg"
+#       delegate_to: localhost
+
+#     - name: Remove core links from working config
+#       replace:
+#         path: "{{ working_config }}"
+#         regexp: "{{ core_links_regex }}"
+#         replace: ""
+#       delegate_to: localhost
+
+#     - name: Extract core config from working config
+#       copy:
+#         content: "{{ lookup('file', split_config_dir + '/core.cfg') }}\n{{ lookup('file', working_config) | regex_findall(core_config, multiline=True) | join('\n') }}"
+#         dest: "{{ split_config_dir }}/core.cfg"
+#       delegate_to: localhost
+
+#     - name: Remove core config from working config
+#       replace:
+#         path: "{{ working_config }}"
+#         regexp: "{{ core_config }}"
+#         replace: ""
+#       delegate_to: localhost

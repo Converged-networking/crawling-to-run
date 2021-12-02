@@ -1,3 +1,10 @@
 ---
 tmp_dir: "{{ playbook_dir }}/../live"
 tmp_hostdir: "{{ tmp_dir}}/{{ inventory_hostname }}"
+
+
+# Output data
+ip_address_data: "{{ tmp_hostdir }}/ip_addresses.txt"
+src_config: "{{ tmp_hostdir }}/config.cfg"
+interface_data: "{{ tmp_hostdir }}/interface.yml"
+neighbor_data: "{{ tmp_hostdir }}/neighbor.yml"

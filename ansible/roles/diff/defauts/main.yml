@@ -1,0 +1,6 @@
+---
+tmp_dir: "{{ playbook_dir }}/../live"
+tmp_hostdir: "{{ tmp_dir}}/{{ inventory_hostname }}"
+
+# Input data
+new_config: "{{ tmp_hostdir }}/new_config.cfg"

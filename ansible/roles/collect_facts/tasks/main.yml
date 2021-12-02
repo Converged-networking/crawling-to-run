@@ -5,5 +5,5 @@
     path: "{{ tmp_hostdir }}"
     state: directory
 
-- include_tasks: eos.yml
+- import_tasks: eos.yml
   when: ansible_network_os == 'arista.eos.eos'

@@ -6,4 +6,11 @@
     - arista.avd
 
   roles:
-    - collect_facts
+    # - name: collect_facts
+    # - name: transform_config
+    #   vars: 
+    #     action: split
+    - name: transform_config
+      vars: 
+        action: rebuild
+    - name: diff

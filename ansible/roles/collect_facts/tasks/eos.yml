@@ -4,25 +4,24 @@
   arista.eos.eos_facts:
     gather_subset:
     - '!hardware'
-  when: ansible_network_os == 'arista.eos.eos'
   register: eos_facts
 
 - name: "Save IP addresses"
   copy: 
     content: "{{ eos_facts.ansible_facts.ansible_net_all_ipv4_addresses | join('\n')}}"
-    dest: "{{ tmp_hostdir }}/ip_addresses.txt"
+    dest: "{{ ip_address_data }}"
 
 - name: "Save config"
   copy: 
     content: "{{ eos_facts.ansible_facts.ansible_net_config }}"
-    dest: "{{ tmp_hostdir }}/config.txt"
+    dest: "{{ src_config }}"
 
 - name: "Save interface data"
   copy: 
     content: "{{ eos_facts.ansible_facts.ansible_net_interfaces | to_nice_yaml }}"
-    dest: "{{ tmp_hostdir }}/interface.yml"
+    dest: "{{ interface_data }}"
 
 - name: "Save neighbor data"
   copy: 
     content: "{{ eos_facts.ansible_facts.ansible_net_neighbors | to_nice_yaml }}"
-    dest: "{{ tmp_hostdir }}/neighbor.yml"
+    dest: "{{ interface_data }}"
