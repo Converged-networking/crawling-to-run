@@ -1,27 +1,12 @@
 ---
 
-- name: Gather all facts except hardware
+- name: Gather configuration
   arista.eos.eos_facts:
     gather_subset:
-    - '!hardware'
+    - 'config'
   register: eos_facts
 
-- name: "Save IP addresses"
-  copy: 
-    content: "{{ eos_facts.ansible_facts.ansible_net_all_ipv4_addresses | join('\n')}}"
-    dest: "{{ ip_address_data }}"
-
-- name: "Save config"
+- name: "Save configuration"
   copy: 
     content: "{{ eos_facts.ansible_facts.ansible_net_config }}"
     dest: "{{ src_config }}"
-
-- name: "Save interface data"
-  copy: 
-    content: "{{ eos_facts.ansible_facts.ansible_net_interfaces | to_nice_yaml }}"
-    dest: "{{ interface_data }}"
-
-- name: "Save neighbor data"
-  copy: 
-    content: "{{ eos_facts.ansible_facts.ansible_net_neighbors | to_nice_yaml }}"
-    dest: "{{ interface_data }}"

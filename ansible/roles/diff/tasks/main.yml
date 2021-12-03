@@ -1,5 +1,7 @@
-- name: load configuration from file
+---
+
+- name: Diff intended config against nodes
   arista.eos.eos_config:
-    src: "{{ new_config }}"
+    src: "{{ intended_config }}"
   check_mode: true
   diff: yes

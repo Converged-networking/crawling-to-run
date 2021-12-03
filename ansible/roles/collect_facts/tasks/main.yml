@@ -1,9 +1,13 @@
 ---
 
-- name: Create temporary output directory
+- name: Ensure output dirs exist
   ansible.builtin.file:
-    path: "{{ tmp_hostdir }}"
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ backup_dir }}"
+  run_once: true
+  changed_when: false
 
 - import_tasks: eos.yml
   when: ansible_network_os == 'arista.eos.eos'

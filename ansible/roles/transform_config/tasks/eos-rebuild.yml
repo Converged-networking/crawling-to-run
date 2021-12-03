@@ -1,6 +1,6 @@
 ---
 - name: Concatenate splitted config to single file
   copy:
-    content: "{{ lookup('file', mgmt_cfg) }}\n{{ lookup('file', endpoint_cfg) }}\n{{ lookup('file', working_config) }}\n"
-    dest: "{{ new_config }}"
+    content: "{{ lookup('file', working_config) }}\n{{ lookup('file', endpoint_cfg) }}\nend\n"
+    dest: "{{ intended_config }}"
   delegate_to: localhost

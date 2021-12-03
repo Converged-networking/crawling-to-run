@@ -1,15 +1,16 @@
 ---
 
-- name: Create output directory
-  ansible.builtin.file:
-    path: "{{ split_config_dir }}"
-    state: directory
-
 - name: Initialize working config 
   copy:
     src: "{{ src_config }}"
     dest: "{{ working_config }}"
   delegate_to: localhost
+
+- name: Remove end line from working config
+  ansible.builtin.lineinfile:
+    path: "{{ working_config }}"
+    regexp: "^end$"
+    state: absent
 
 - name: Seperate endpoint config
   block:
@@ -26,20 +27,20 @@
         replace: ""
       delegate_to: localhost
 
-- name: Seperate management config
-  block:
-    - name: Extract management config from working config
-      copy:
-        content: "{{ lookup('file', working_config) | regex_findall(mgmt_config_regex, multiline=True) | join('\n') }}"
-        dest: "{{ mgmt_cfg }}"
-      delegate_to: localhost
+# - name: Seperate management config
+#   block:
+#     - name: Extract management config from working config
+#       copy:
+#         content: "{{ lookup('file', working_config) | regex_findall(mgmt_config_regex, multiline=True) | join('\n') }}"
+#         dest: "{{ mgmt_cfg }}"
+#       delegate_to: localhost
 
-    - name: Remove management config from working config
-      replace:
-        path: "{{ working_config }}"
-        regexp: "{{ mgmt_config_regex }}"
-        replace: ""
-      delegate_to: localhost
+#     - name: Remove management config from working config
+#       replace:
+#         path: "{{ working_config }}"
+#         regexp: "{{ mgmt_config_regex }}"
+#         replace: ""
+#       delegate_to: localhost
 
 # - name: Seperate core config
 #   block:

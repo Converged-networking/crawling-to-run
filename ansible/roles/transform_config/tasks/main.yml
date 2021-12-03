@@ -1,5 +1,22 @@
 ---
 
-- import_tasks: eos-{{ action }}.yml
+- name: Ensure host working dir exists
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ split_config_dir }}"
+  changed_when: false
+
+- name: Ensure output dirs exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ intended_config_dir }}"
+  run_once: true
+  changed_when: false
+
+- import_tasks: eos-{{ transform_action }}.yml
   when: 
     - ansible_network_os == 'arista.eos.eos'

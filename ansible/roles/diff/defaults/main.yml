@@ -1,0 +1,4 @@
+---
+# Input data
+intended_config_dir: "{{ inventory_dir }}/intended/config"
+intended_config: "{{ intended_config_dir }}/{{ inventory_hostname }}.cfg"

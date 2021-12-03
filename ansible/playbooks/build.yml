@@ -1,0 +1,11 @@
+---
+- name: Run project
+  hosts: ceos
+
+  roles:
+    - name: transform_config
+      vars: 
+        transform_action: split
+    - name: transform_config
+      vars: 
+        transform_action: rebuild

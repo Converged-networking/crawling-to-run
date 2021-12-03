@@ -1,0 +1,6 @@
+---
+- name: Run project
+  hosts: ceos
+
+  roles:
+    - name: collect_facts
