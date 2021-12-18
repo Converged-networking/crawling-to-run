@@ -17,6 +17,7 @@ Some goals are:
   - [Table of contents](#table-of-contents)
   - [Requirements](#requirements)
   - [The lab](#the-lab)
+    - [Prepare Docker](#prepare-docker)
     - [Containerlab](#containerlab)
   - [Credits](#credits)
 
@@ -29,6 +30,16 @@ Some goals are:
 ## The lab
 
 ![Lab topo](media/lab.drawio.png)
+
+In practice `gw1` is a firewall but currently that isn't the focus so it's replaced by a simple router-on-a-stick. The primary network techniques present in the lab are:
+
+- **L3 spine-leaf design**: The network uses a L3 design for maximum stability
+- **OSPF ECMP**: OSPF with ECMP is used to maintain routes and maximize available resources 
+- **VXLAN bridging**: VLAN's 11 and 12 are switched towards gw1 over a L3 spine
+- **VXLAN routing**: VLAN 13 is switched and also routed on the WAN leaf
+- **MLAG**: Multi-chassis link aggregation group to join 2 switches and make them act as 1
+- **unprotected servers**: Simple Linux containers without redundancy
+- **protected server**: Same container but MLAG is utilized for redundancy
 
 **Subnets:**
 
@@ -86,6 +97,16 @@ Spine has the lower IP of the prefix
 | client1  | Single access | 11   | 10.0.11.5 | leaf1a         | eth5       |
 | client2  | LACP access   | 12   | 10.0.12.5 | leaf1a, leaf1b | eth6, eth6 |
 | client 3 | Single acces  | 13   | 10.0.13.5 | leaf1b         | eth5       |
+
+### Prepare Docker
+
+The lab uses cEOS - Arista EOS in a container format - and Docker is used to run those containers. To run the lab the container images can be downloaded from the Arista support portal.
+
+This lab uses EOS version 4.26 and images need to be tagged as such. Run the following command to import the images:
+
+```bash
+docker import cEOS-lab-4.26.3M.tar ceos:4.26
+```
 
 ### Containerlab
 
