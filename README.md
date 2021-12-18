@@ -70,7 +70,7 @@ Spine has the lower IP of the prefix
 
 ### Containerlab
 
-To spin up a lab with EOS switches we're using Containerlab. Installation instructions can be bound [here]([https://link](https://containerlab.srlinux.dev/install/))
+To spin up a lab with EOS switches we're using Containerlab. Installation instructions can be found [here](https://containerlab.srlinux.dev/install/)
 
 Start lab and configure linux containers:
 
