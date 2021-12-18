@@ -1,11 +1,30 @@
 # Crawling to run
 
-Project to find out how to start slowly in the world of automation instead of trying to automate everything and setting yourself up to fail.
+After trying (and failing again and again) to automate the network using a Source of Truth (SoT) first approach I'm looking for a way to move to change-focused automation. This project offers a cEOS lab and with that this project acts as a playground for me to learn a new approach in network automation.
+
+This project might not contain the automation part of my journey as my plan is to use gitlab as my CI/CD tool.
+
+Some goals are:
+
+- [ ] How to run pre-checks withouth complete intended configuration
+- [ ] Best way to seperate inventory and automation (git submodule?)
+- [ ] Find a solution for how users need to input a change and update the inventory (gitlab pages forms?)
+- [ ] Incorporate robot framework for post-checks
+
+## Table of contents
+
+- [Crawling to run](#crawling-to-run)
+  - [Table of contents](#table-of-contents)
+  - [Requirements](#requirements)
+  - [The lab](#the-lab)
+    - [Containerlab](#containerlab)
+  - [Credits](#credits)
 
 ## Requirements
 
+- **A Linux distribution**: cEOS does not work properly under WSL(2), lab might work under intel based Mac but additional steps are needed
 - **Containerlab**: Tool to orchestrate a docker based lab
-- **Ansible**: Main pillar of automation
+- **Ansible**: Main tool for making network changes
 
 ## The lab
 
@@ -90,3 +109,7 @@ Destroy and remove current state:
 ```bash
 sudo containerlab destroy --topo lab.clab.yml --cleanup
 ```
+
+## Credits
+
+A blow by Ratul Mahajan: [Incrementally automating your network](https://www.intentionet.com/blog/incrementally-automating-your-network/)
