@@ -133,4 +133,4 @@ sudo containerlab destroy --topo lab.clab.yml --cleanup
 
 ## Credits
 
-A blow by Ratul Mahajan: [Incrementally automating your network](https://www.intentionet.com/blog/incrementally-automating-your-network/)
+[Incrementally automating your network](https://www.intentionet.com/blog/incrementally-automating-your-network/) by Ratul Mahajan
