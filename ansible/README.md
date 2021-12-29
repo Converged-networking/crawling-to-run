@@ -16,3 +16,11 @@ All over documentation of network automation.
 ansible-playbook playbooks/build.yml
 ansible-playbook -e '@creds-lab.yml' playbooks/diff.yml
 ```
+
+## Batfish
+
+```bash
+docker pull batfish/allinone
+
+ansible-playbook -e '@creds-lab.yml' playbooks/pre.yml
+```

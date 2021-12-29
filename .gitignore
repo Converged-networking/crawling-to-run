@@ -1,5 +1,14 @@
 # Current state Containerlab
 **/clab-*/
+# python virtual env
 .venv
-./live
+# directory for playbook temp files
+ansible/playbooks/live
+# Temp file used by containerlab
 .*clab.yaml
+
+# External Ansible collections
+ansible/collections/ansible_collections/*
+
+# External Ansible roles
+ansible/roles/batfish.base

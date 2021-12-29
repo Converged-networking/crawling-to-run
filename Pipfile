@@ -5,8 +5,12 @@ name = "pypi"
 
 [packages]
 ansible = "*"
+pybatfish = "*"
+docker = "*"
 
 [dev-packages]
+jupyter = "*"
+notebook = "*"
 
 [requires]
 python_version = "3.8"
