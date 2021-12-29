@@ -12,3 +12,5 @@ ansible_httpapi_port: 443
 ansible_httpapi_host: '{{ ansible_host }}'
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
+
+management_interface: Management0

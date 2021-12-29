@@ -1,0 +1,11 @@
+---
+
+- name: Configure EOS with intended configuration
+  arista.eos.eos_config:
+    src: "{{ config_dir }}/{{ inventory_hostname_short }}.conf"
+    save_when: never
+    backup: True
+    backup_options:
+      filename: "{{ pre_running_config_backup_filename }}"
+      dir_path: "{{ backup_dir }}"
+  notify: "Backup EOS"

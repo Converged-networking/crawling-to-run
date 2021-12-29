@@ -1,0 +1,95 @@
+{# Filter destined for loopback interface #}
+delete firewall family inet filter protect-re
+set firewall family inet filter protect-re term synflood-protect from source-prefix-list mgmt-prefixes
+set firewall family inet filter protect-re term synflood-protect from protocol tcp
+set firewall family inet filter protect-re term synflood-protect from tcp-flags "(syn & !ack) | fin | rst"
+set firewall family inet filter protect-re term synflood-protect then policer limit-100k
+set firewall family inet filter protect-re term synflood-protect then accept
+set firewall family inet filter protect-re term allow-snmp from source-prefix-list mgmt-prefixes
+set firewall family inet filter protect-re term allow-snmp from protocol udp
+set firewall family inet filter protect-re term allow-snmp from destination-port snmp
+set firewall family inet filter protect-re term allow-snmp then accept
+set firewall family inet filter protect-re term allow-icmp from protocol icmp
+set firewall family inet filter protect-re term allow-icmp from icmp-type echo-request
+set firewall family inet filter protect-re term allow-icmp from icmp-type echo-reply
+set firewall family inet filter protect-re term allow-icmp from icmp-type unreachable
+set firewall family inet filter protect-re term allow-icmp from icmp-type time-exceeded
+set firewall family inet filter protect-re term allow-icmp then accept
+set firewall family inet filter protect-re term allow-traceroute from protocol udp
+set firewall family inet filter protect-re term allow-traceroute from destination-port 33434-33523
+set firewall family inet filter protect-re term allow-traceroute then accept
+set firewall family inet filter protect-re term allow-local from source-prefix-list localhost
+set firewall family inet filter protect-re term allow-local then accept
+set firewall family inet filter protect-re term allow-ntp from source-prefix-list ntp-servers
+set firewall family inet filter protect-re term allow-ntp from protocol udp
+set firewall family inet filter protect-re term allow-ntp from destination-port ntp
+set firewall family inet filter protect-re term allow-ntp then accept
+set firewall family inet filter protect-re term allow-ssh from source-prefix-list mgmt-prefixes
+set firewall family inet filter protect-re term allow-ssh from protocol tcp
+set firewall family inet filter protect-re term allow-ssh from destination-port ssh
+set firewall family inet filter protect-re term allow-ssh then accept
+set firewall family inet filter protect-re term allow-netconf from source-prefix-list mgmt-prefixes
+set firewall family inet filter protect-re term allow-netconf from protocol tcp
+set firewall family inet filter protect-re term allow-netconf from destination-port 830
+set firewall family inet filter protect-re term allow-netconf then accept
+set firewall family inet filter protect-re term allow-radius-access from source-prefix-list radius-servers-access
+set firewall family inet filter protect-re term allow-radius-access from protocol udp
+set firewall family inet filter protect-re term allow-radius-access from source-port 1812
+set firewall family inet filter protect-re term allow-radius-access from source-port 1813
+set firewall family inet filter protect-re term allow-radius-access from source-port 1645
+set firewall family inet filter protect-re term allow-radius-access then accept
+set firewall family inet filter protect-re term allow-radius-aaa from source-prefix-list radius-servers-aaa
+set firewall family inet filter protect-re term allow-radius-aaa from protocol udp
+set firewall family inet filter protect-re term allow-radius-aaa from source-port 1812
+set firewall family inet filter protect-re term allow-radius-aaa from source-port 1813
+set firewall family inet filter protect-re term allow-radius-aaa from source-port 1645
+set firewall family inet filter protect-re term allow-radius-aaa then accept
+set firewall family inet filter protect-re term allow-ftp-backup from source-address 172.23.4.21/32
+set firewall family inet filter protect-re term allow-ftp-backup from protocol tcp
+set firewall family inet filter protect-re term allow-ftp-backup then accept
+set firewall family inet filter protect-re term allow-dns from source-prefix-list name-servers
+set firewall family inet filter protect-re term allow-dns from protocol udp
+set firewall family inet filter protect-re term allow-dns from source-port 53
+set firewall family inet filter protect-re term allow-dns then accept
+set firewall family inet filter protect-re term discard then log
+set firewall family inet filter protect-re term discard then syslog
+set firewall family inet filter protect-re term discard then discard
+{# Policer used for syn flood protection #}
+delete firewall policer limit-100k
+set firewall policer limit-100k if-exceeding bandwidth-limit 100k
+set firewall policer limit-100k if-exceeding burst-size-limit 15k
+set firewall policer limit-100k then discard
+{# Overwrite all policy options #}
+delete policy-options
+{# Configure management prefixes that are allowed to SSH, RESTCONF, SNMP and etc. #}
+set policy-options prefix-list mgmt-prefixes 172.19.1.251/32
+set policy-options prefix-list mgmt-prefixes 172.19.1.252/32
+set policy-options prefix-list mgmt-prefixes 172.19.1.253/32
+set policy-options prefix-list mgmt-prefixes 172.19.1.254/32
+set policy-options prefix-list mgmt-prefixes 172.23.3.0/24
+set policy-options prefix-list mgmt-prefixes 172.23.4.0/24
+{# Dynamically lookup name servers from config #}
+set policy-options prefix-list name-servers apply-path "system name-server <*>"
+{# Dynamically lookup NTP servers from config #}
+set policy-options prefix-list ntp-servers apply-path "system ntp server <*>"
+{# Dynamically lookup RADIUS servers for local authentication #}
+set policy-options prefix-list radius-servers-aaa apply-path "system radius-server <*>"
+{# Dynamically lookup RADIUS servers for dot1x #}
+set policy-options prefix-list radius-servers-access apply-path "access radius-server <*>"
+{# All localhost addresses, mainly is 1 host but RFC specifies /8 #}
+set policy-options prefix-list localhost 127.0.0.0/8
+{# Configure loopback interface and apply loopback filter #}
+set interfaces lo0 unit 0 family inet filter input protect-re
+set interfaces lo0 unit 0 family inet address 127.0.0.1/32
+
+{# Configure syslog server #}
+delete system syslog host {{ syslog_server }}
+set system syslog host {{ syslog_server }} any notice
+set system syslog host {{ syslog_server }} authorization info
+set system syslog host {{ syslog_server }} daemon info
+insert system syslog host {{ syslog_server }} before file messages
+
+{# Configure NTP server #}
+delete system ntp
+set system ntp server {{ primary_ntp_server }} prefer
+set system ntp server {{ secondary_ntp_server }}

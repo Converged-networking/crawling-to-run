@@ -2,3 +2,4 @@
 **/clab-*/
 .venv
 ./live
+.*clab.yaml

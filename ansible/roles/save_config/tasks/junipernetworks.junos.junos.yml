@@ -1,0 +1,9 @@
+---
+- name: Copy configuration to FTP server
+  vars:
+    # file copy command is not allowed via netconf
+    ansible_connection: ansible.netcommon.network_cli
+  junipernetworks.junos.junos_command:
+    commands: "file copy /config/juniper.conf.gz ftp://{{ ftp_server }}/configs/junos/{{ inventory_hostname_short }}.conf.gz"
+  register: backup_output
+  failed_when: "'100%' not in backup_output.stdout[0]"

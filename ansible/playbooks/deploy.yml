@@ -1,0 +1,8 @@
+---
+- hosts: all:!clab-walk-gw1
+
+
+   roles:
+
+    - role: deploy
+      tags: ['deploy']

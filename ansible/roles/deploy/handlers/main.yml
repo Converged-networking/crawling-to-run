@@ -1,0 +1,17 @@
+---
+
+- name: Backup configuration post-change - EOS
+  arista.eos.eos_config:
+    backup: yes
+    backup_options:
+      filename: "{{ post_running_config_backup_filename }}"
+      dir_path: "{{ backup_dir }}"
+  listen: "Backup EOS"
+
+- name: Backup configuration post-change - JunOS
+  junipernetworks.junos.junos_config:
+    backup: yes
+    backup_options:
+      filename: "{{ post_running_config_backup_filename }}"
+      dir_path: "{{ backup_dir }}"
+  listen: "Backup JunOS"

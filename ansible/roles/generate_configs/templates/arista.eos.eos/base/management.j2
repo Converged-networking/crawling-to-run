@@ -1,0 +1,25 @@
+alias copyftp
+   10 routing-context vrf mgmt
+   20 copy running-config ftp://{{ ftp_server }}/configs/eos/{{ inventory_hostname_short }}.conf
+   30 routing-context vrf default
+exit
+!
+ntp server vrf mgmt {{ primary_ntp_server }} prefer source {{ management_interface }}
+ntp server vrf mgmt {{ secondary_ntp_server }} source {{ management_interface }}
+!
+logging vrf mgmt host {{ syslog_server }}
+!
+ip access-list standard mgmt-acl
+   10 remark jumphost
+   11 permit 172.23.3.0/24
+   20 remark mgmt servers
+   21 permit 172.23.4.0/24
+   30 remark emergency access
+   31 permit host 172.19.1.251
+   32 permit host 172.19.1.252
+   33 permit host 172.19.1.253
+   34 permit host 172.19.1.254
+   40 remark Resolve
+   41 permit host 136.231.16.6
+   50 deny any log
+exit

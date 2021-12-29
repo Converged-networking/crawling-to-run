@@ -1,0 +1,26 @@
+---
+
+- name: "Cleanup intended config folder: {{ config_dir_name }}"
+  file:
+    path: "{{ config_dir }}"
+    state: absent
+    mode: 0755
+  delegate_to: localhost
+  run_once: true
+
+- name: "Create intended config folder: {{ config_dir_name }}"
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: 0755
+  delegate_to: localhost
+  run_once: true
+
+- name: Generate device configuration.
+  template:
+    src: "{{ ansible_network_os }}/{{ building_block }}.j2"
+    dest: "{{ config_dir }}/{{ inventory_hostname_short }}.conf"
+  delegate_to: localhost
+  check_mode: false
+  when : 
+    - ansible_network_os is defined

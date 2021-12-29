@@ -1,6 +1,14 @@
 ---
-- name: Run project
-  hosts: ceos
+- hosts: all:!clab-walk-gw1
 
-  roles:
-    - name: diff
+
+  tasks:
+
+  - name: "Including role deploy with check and diff mode"
+    include_role: 
+      name: deploy
+      apply:
+        tags: ['diff']
+        check_mode: True
+        diff: True
+    tags: ['always']

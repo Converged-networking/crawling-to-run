@@ -1,0 +1,7 @@
+---
+- name: Verify NTP status
+  junipernetworks.junos.junos_command:
+    commands: 
+      - show ntp associations no-resolve
+    wait_for:
+    - result[0] contains '.GNSS.'

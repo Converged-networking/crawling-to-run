@@ -1,0 +1,20 @@
+---
+syslog_server: 172.23.4.20
+
+primary_ntp_server: 136.231.2.171
+secondary_ntp_server: 136.231.2.172
+
+ftp_server: 172.23.4.21
+
+management_interface: Management1
+
+# Root directory where to build output structure
+root_dir: "{{ inventory_dir }}"
+
+# Main output directory
+output_dir_name: 'intended'
+output_dir: '{{root_dir}}/{{output_dir_name}}'
+
+# Intended configuration Directory
+config_dir_name: "config"
+config_dir: '{{output_dir}}/{{ config_dir_name }}'

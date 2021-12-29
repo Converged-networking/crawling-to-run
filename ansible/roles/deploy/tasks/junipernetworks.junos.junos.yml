@@ -1,0 +1,21 @@
+---
+
+- name: Configure JunOS with intended configuration
+  junipernetworks.junos.junos_config:
+    confirm: 5
+    src: "{{ config_dir }}/{{ inventory_hostname_short }}.conf"
+    src_format: set
+    backup: True
+    backup_options:
+      filename: "{{ pre_running_config_backup_filename }}"
+      dir_path: "{{ backup_dir }}"
+  register: junos_update
+  notify: "Backup JunOS"
+
+- name: Confirm configuration
+  junipernetworks.junos.junos_config:
+    confirm_commit: yes
+  when: 
+    - not ansible_check_mode
+    - junos_update.changed
+

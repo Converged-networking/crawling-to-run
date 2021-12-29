@@ -13,5 +13,6 @@ All over documentation of network automation.
 ## Run
 
 ```bash
-ansible-playbook -e '@creds-lab.yml' playbooks/main.yml
+ansible-playbook playbooks/build.yml
+ansible-playbook -e '@creds-lab.yml' playbooks/diff.yml
 ```

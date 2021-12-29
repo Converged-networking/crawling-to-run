@@ -1,0 +1,13 @@
+---
+- hosts: all:!clab-walk-gw1
+
+
+  tasks:
+    - name: Build configuration
+      import_playbook: build.yml
+
+    - name: Deploy configuration
+      import_playbook: deploy.yml
+
+    - name: Verify deployment and save
+      import_playbook: post.yml
