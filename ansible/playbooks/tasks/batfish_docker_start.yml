@@ -23,6 +23,7 @@
           image: batfish/allinone
           state: started
           ports:
+            - "8888:8888"
             - "9996:9996"
             - "9997:9997"
           volumes:

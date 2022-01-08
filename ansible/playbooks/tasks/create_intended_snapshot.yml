@@ -1,0 +1,30 @@
+
+- name: Copy source snapshot
+  run_once: True
+  delegate_to: localhost
+  ansible.builtin.copy:
+    src: "{{ src_snapshot_dir }}/"
+    dest: "{{ intended_snapshot_dir }}"
+
+- name: Remove closing statement from config
+  delegate_to: localhost
+  ansible.builtin.lineinfile:
+    path: "{{ intended_snapshot_dir }}/snapshot/configs/{{ inventory_hostname }}.cfg"
+    state: absent
+    regexp: '^end$'
+  when: ansible_network_os is defined
+
+- name: Check if intended config exists
+  delegate_to: localhost
+  stat:
+    path: "{{ intended_config }}"
+  register: intended_config_stat
+
+- name: Add intended config to snapshot
+  delegate_to: localhost
+  ansible.builtin.lineinfile:
+    path: "{{ intended_snapshot_dir }}/snapshot/configs/{{ inventory_hostname }}.cfg"
+    line: "{{ lookup('file', intended_config )}}\nend"
+  when: 
+    - ansible_network_os is defined
+    - intended_config_stat.stat.exists

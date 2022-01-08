@@ -6,6 +6,9 @@
     - name: Build configuration
       import_playbook: build.yml
 
+    - name: Do pre checks
+      import_playbook: pre.yml
+
     - name: Deploy configuration
       import_playbook: deploy.yml
 

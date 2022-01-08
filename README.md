@@ -6,8 +6,9 @@ This project might not contain the automation part of my journey as my plan is t
 
 Some goals are:
 
-- [ ] How to run pre-checks withouth complete intended configuration
-- [ ] Best way to seperate inventory and automation (git submodule?)
+- [x] How to run pre-checks without complete intended configuration (append changed to current config)
+- [ ] Detect breaking changes using Batfish
+- [ ] Best way to separate inventory and automation (git submodule?)
 - [ ] Find a solution for how users need to input a change and update the inventory (gitlab pages forms?)
 - [ ] Incorporate robot framework for post-checks
 

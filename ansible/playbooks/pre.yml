@@ -9,121 +9,27 @@
   roles:
     - batfish.base
 
-
   tasks:
 
-  - name: "Including role deploy with check and diff mode"
-    include_role: 
-      name: gather_facts
-      apply:
-        tags: ['pre']
-    tags: ['always']
-    when: ansible_net_config is not defined
+    - include_tasks: tasks/create_current_snapshot.yml
+      vars:
+        root_dir: "{{ playbook_dir }}/live/batfish"
 
-  - name: "Cleanup snapshot"
-    changed_when: False
-    file:
-      path: "{{ playbook_dir }}/live/snapshot"
-      state: absent
-      mode: 0755
-    delegate_to: localhost
-    run_once: true
+    - include_tasks: tasks/create_intended_snapshot.yml
+      vars:
+        src_snapshot_dir: "{{ playbook_dir }}/live/batfish/current"
+        intended_snapshot_dir: "{{ playbook_dir }}/live/batfish/intended"
+        intended_config: "{{ inventory_dir }}/intended/config/{{ inventory_hostname }}.conf"
 
-  - name: "Create snapshot dirs"
-    changed_when: False
-    file:
-      path: "{{ item }}"
-      state: directory
-      mode: 0755
-    delegate_to: localhost
-    run_once: true
-    loop:
-      - "{{ playbook_dir }}/live/snapshot"
-      - "{{ playbook_dir }}/live/snapshot/configs"
-      - "{{ playbook_dir }}/live/snapshot/hosts"
-      - "{{ playbook_dir }}/live/snapshot/iptables"
+    - include_tasks: tasks/batfish_analysis.yml
+      vars:
+        snapshot_name: current_snapshot
+        snapshot_dir: "{{ playbook_dir }}/live/batfish/current"
 
-  - name: "Save live config to snapshot"
-    changed_when: False
-    ansible.builtin.copy:
-      content: "{{ ansible_net_config }}"
-      dest: "{{ playbook_dir }}/live/snapshot/configs/{{ inventory_hostname }}.cfg"
-    when: ansible_network_os is defined
-
-  - name: Save host files to snapshot
-    changed_when: False
-    run_once: true
-    ansible.builtin.copy:
-      content: "{{ item | to_nice_json }}"
-      dest: "{{ playbook_dir }}/live/snapshot/hosts/{{ item.hostname }}.json"
-    loop:
-      - hostname: client1
-        hostInterfaces:
-          eth1:
-            name: eth1
-            prefix: 10.0.11.5/24
-            gateway: 10.0.11.1
-      - hostname: client2
-        hostInterfaces:
-          bond0:
-            name: bond0
-            prefix: 10.0.12.5/24
-            gateway: 10.0.12.1
-      - hostname: client3
-        hostInterfaces:
-          eth1:
-            name: eth1
-            prefix: 10.0.13.5/24
-            gateway: 10.0.13.1
-
-  - name: Execute Batfish related tasks in a block that is "delegate_to -> localhost" and "run_once -> true"
-    run_once: True
-    delegate_to: localhost
-    block:
-
-    - name: Setup connection to Batfish service
-      changed_when: False
-      bf_session:
-        host: localhost
-        name: local_batfish
-
-    - name: Initialize the example network
-      bf_init_snapshot:
-        network: example_network
-        snapshot: example_snapshot
-        snapshot_data: "{{ playbook_dir }}/live/snapshot"
-        overwrite: true
-
-    - name: Retrieve Batfish Facts
-      bf_extract_facts:
-        output_directory: "{{ playbook_dir }}/live/bf_facts"
-      register: bf_facts
-
-    - name: Validate the configuration of network devices
-      bf_assert:
-        assertions:
-          - type: assert_no_undefined_references
-            name: Confirm that there are NO undefined references on any network device
-          # - type: assert_no_forwarding_loops
-          #   name: Assert that there are no forwarding loops in the snapshot
-          - type: assert_no_incompatible_ospf_sessions
-            name: Assert that there are no incompatible or unestablished OSPF sessions present in the snapshot
-          - type: assert_all_flows_succeed
-            name: Assert that traffic flows from client1 to client2
-            parameters:
-              startLocation: client1
-              headers:
-                dstIps: 'client2'
-          # Issue with VARP: https://github.com/batfish/batfish/issues/7863
-          # - type: assert_all_flows_succeed
-          #   name: Assert that traffic flows from client1 to client3
-          #   parameters:
-          #     startLocation: client1
-          #     headers:
-          #       dstIps: 'client3'
-
-      run_once: true
-      delegate_to: localhost
+    - include_tasks: tasks/batfish_analysis.yml
+      vars:
+        snapshot_name: intended_snapshot
+        snapshot_dir: "{{ playbook_dir }}/live/batfish/intended"
 
 
   post_tasks:

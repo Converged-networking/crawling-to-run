@@ -1,0 +1,48 @@
+- name: Execute Batfish related tasks in a block that is "delegate_to -> localhost" and "run_once -> true"
+  run_once: True
+  delegate_to: localhost
+  block:
+
+  - name: Setup connection to Batfish service
+    changed_when: False
+    bf_session:
+      host: localhost
+      name: local_batfish
+
+  - name: Initialize the example network
+    bf_init_snapshot:
+      network: lab
+      snapshot: "{{ snapshot_name }}"
+      snapshot_data: "{{ snapshot_dir }}/snapshot"
+      overwrite: true
+
+  - name: Retrieve Batfish Facts
+    bf_extract_facts:
+      output_directory: "{{ snapshot_dir }}/bf_facts"
+    register: bf_facts
+
+  - name: Validate the configuration of network devices
+    bf_assert:
+      assertions:
+        - type: assert_no_undefined_references
+          name: Confirm that there are NO undefined references on any network device
+        # - type: assert_no_forwarding_loops
+        #   name: Assert that there are no forwarding loops in the snapshot
+        - type: assert_no_incompatible_ospf_sessions
+          name: Assert that there are no incompatible or unestablished OSPF sessions present in the snapshot
+        - type: assert_all_flows_succeed
+          name: Assert that traffic flows from client1 to client2
+          parameters:
+            startLocation: client1
+            headers:
+              dstIps: 'client2'
+        # Issue with VARP: 
+        # - type: assert_all_flows_succeed
+        #   name: Assert that traffic flows from client1 to client3
+        #   parameters:
+        #     startLocation: client1
+        #     headers:
+        #       dstIps: 'client3'
+
+    run_once: true
+    delegate_to: localhost

@@ -1,0 +1,65 @@
+- name: Collect configs using facts role
+  include_role: 
+    name: gather_facts
+    apply:
+      tags: ['pre']
+  tags: ['always']
+  when: ansible_net_config is not defined
+
+- name: "Cleanup snapshot"
+  changed_when: False
+  file:
+    path: "{{ root_dir }}"
+    state: absent
+    mode: 0755
+  delegate_to: localhost
+  run_once: true
+
+- name: "Create snapshot dirs"
+  changed_when: False
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  delegate_to: localhost
+  run_once: true
+  loop:
+    - "{{ root_dir }}/current/snapshot"
+    - "{{ root_dir }}/current/snapshot/configs"
+    - "{{ root_dir }}/current/snapshot/hosts"
+    - "{{ root_dir }}/current/snapshot/iptables"
+
+- name: "Save live config to snapshot"
+  delegate_to: localhost
+  changed_when: False
+  ansible.builtin.copy:
+    content: "{{ ansible_net_config }}"
+    dest: "{{ root_dir }}/current/snapshot/configs/{{ inventory_hostname }}.cfg"
+  when: ansible_network_os is defined
+
+- name: Save host files to snapshot
+  changed_when: False
+  delegate_to: localhost
+  run_once: true
+  ansible.builtin.copy:
+    content: "{{ item | to_nice_json }}"
+    dest: "{{ root_dir }}/current/snapshot/hosts/{{ item.hostname }}.json"
+  loop:
+    - hostname: client1
+      hostInterfaces:
+        eth1:
+          name: eth1
+          prefix: 10.0.11.5/24
+          gateway: 10.0.11.1
+    - hostname: client2
+      hostInterfaces:
+        bond0:
+          name: bond0
+          prefix: 10.0.12.5/24
+          gateway: 10.0.12.1
+    - hostname: client3
+      hostInterfaces:
+        eth1:
+          name: eth1
+          prefix: 10.0.13.5/24
+          gateway: 10.0.13.1
