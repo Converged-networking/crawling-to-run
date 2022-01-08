@@ -1,5 +1,5 @@
 ---
-- hosts: all:!clab-walk-gw1
+- hosts: all
 
 
   pre_tasks:
@@ -108,15 +108,18 @@
           #   name: Assert that there are no forwarding loops in the snapshot
           - type: assert_no_incompatible_ospf_sessions
             name: Assert that there are no incompatible or unestablished OSPF sessions present in the snapshot
+          - type: assert_all_flows_succeed
+            name: Assert that traffic flows from client1 to client2
+            parameters:
+              startLocation: client1
+              headers:
+                dstIps: 'client2'
           # - type: assert_all_flows_succeed
-          #   name: Assert that traffic flows
+          #   name: Assert that traffic flows from client1 to client3
           #   parameters:
-          #     startLocation: leaf1a[Ethernet5]
+          #     startLocation: client1
           #     headers:
-          #       srcIps: 'client1'
-          #       dstIps: 'client2'
-          #       # dstPorts: '80'
-          #       # ipProtocols: 'tcp'
+          #       dstIps: 'client3'
 
       run_once: true
       delegate_to: localhost
