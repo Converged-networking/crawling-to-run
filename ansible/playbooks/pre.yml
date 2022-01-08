@@ -114,6 +114,7 @@
               startLocation: client1
               headers:
                 dstIps: 'client2'
+          # Issue with VARP: https://github.com/batfish/batfish/issues/7863
           # - type: assert_all_flows_succeed
           #   name: Assert that traffic flows from client1 to client3
           #   parameters:
