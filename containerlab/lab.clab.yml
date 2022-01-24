@@ -61,6 +61,13 @@ topology:
     # Clients
     client1:
       kind: linux
+      image: linuxserver/openssh-server
+      env:
+        SUDO_ACCESS: true
+        PASSWORD_ACCESS: true
+        USER_NAME: lab
+        USER_PASSWORD: lab123
+        TZ: Europe/Amsterdam
       mgmt_ipv4: 172.20.20.200
     client2:
       kind: linux
