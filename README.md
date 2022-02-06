@@ -1,15 +1,10 @@
 # Crawling to run
 
-After trying (and failing again and again) to automate the network using a Source of Truth (SoT) first approach I'm looking for a way to move to change-focused automation. This project offers a cEOS lab and with that this project acts as a playground for me to learn a new approach in network automation.
+My virtual lab environment to test (net)devops workflows, using utilities like:
 
-This project might not contain the automation part of my journey as my plan is to use gitlab as my CI/CD tool.
-
-Some goals are:
-
-- [ ] How to run pre-checks withouth complete intended configuration
-- [ ] Best way to seperate inventory and automation (git submodule?)
-- [ ] Find a solution for how users need to input a change and update the inventory (gitlab pages forms?)
-- [ ] Incorporate robot framework for post-checks
+- ansible
+- batfish
+- robot framework
 
 ## Table of contents
 

@@ -1,0 +1,7 @@
+---
+roles:
+  - name: batfish.base
+
+collections:
+  - name: community.docker
+  - name: arista.avd

@@ -6,6 +6,8 @@ topology:
   kinds:
     ceos:
       image: ceos:4.26
+      binds:
+        - /home/adm_kuurstra/code/crawling-to-run/containerlab/my-99-eos.conf:/etc/sysconfig/99-eos.conf 
     linux:
       image: ghcr.io/hellt/network-multitool
 
@@ -13,7 +15,6 @@ topology:
 
     gw1:
       kind: ceos
-      mgmt_ipv4: 172.20.20.5
       startup-config: startup-configs/gw1.cfg
       labels:
         ansible-group: gw
@@ -23,65 +24,71 @@ topology:
       mgmt_ipv4: 172.20.20.6
       startup-config: startup-configs/spine1.cfg
       labels:
-        ansible-group: spine
+        ansible-group: dss
     spine2:
       kind: ceos
       mgmt_ipv4: 172.20.20.7
       startup-config: startup-configs/spine2.cfg
       labels:
-        ansible-group: spine
+        ansible-group: dss
 
     wan1a:
       kind: ceos
       mgmt_ipv4: 172.20.20.11
       startup-config: startup-configs/wan1a.cfg
       labels:
-        ansible-group: leaf
+        ansible-group: ocs
     wan1b:
       kind: ceos
       mgmt_ipv4: 172.20.20.12
       startup-config: startup-configs/wan1b.cfg
       labels:
-        ansible-group: leaf
+        ansible-group: ocs
 
     leaf1a:
       kind: ceos
       mgmt_ipv4: 172.20.20.21
       startup-config: startup-configs/leaf1a.cfg
       labels:
-        ansible-group: leaf
+        ansible-group: dls
     leaf1b:
       kind: ceos
       mgmt_ipv4: 172.20.20.22
       startup-config: startup-configs/leaf1b.cfg
       labels:
-        ansible-group: leaf
+        ansible-group: dls
 
     # Clients
     client1:
       kind: linux
+      image: linuxserver/openssh-server
+      env:
+        SUDO_ACCESS: true
+        PASSWORD_ACCESS: true
+        USER_NAME: lab
+        USER_PASSWORD: lab123
+        TZ: Europe/Amsterdam
+      mgmt_ipv4: 172.20.20.200
     client2:
       kind: linux
+      mgmt_ipv4: 172.20.20.201
     client3:
       kind: linux
+      mgmt_ipv4: 172.20.20.202
 
   links:
-    # wan1a
+    # leaf wan1
     - endpoints: ["spine1:eth1", "wan1a:eth1"]
     - endpoints: ["spine2:eth1", "wan1a:eth2"]
-    # wan1b
     - endpoints: ["spine1:eth2", "wan1b:eth1"]
     - endpoints: ["spine2:eth2", "wan1b:eth2"]
-    # Peer links ocs1
     - endpoints: ["wan1a:eth3", "wan1b:eth3"]
     - endpoints: ["wan1a:eth4", "wan1b:eth4"]
-    # leaf1a
+    # leaf1
     - endpoints: ["spine1:eth3", "leaf1a:eth1"]
     - endpoints: ["spine2:eth3", "leaf1a:eth2"]
-    # leaf1b
     - endpoints: ["spine1:eth4", "leaf1b:eth1"]
     - endpoints: ["spine2:eth4", "leaf1b:eth2"]
-    # Peer links leaf1
     - endpoints: ["leaf1a:eth3", "leaf1b:eth3"]
     - endpoints: ["leaf1a:eth4", "leaf1b:eth4"]
 

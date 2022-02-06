@@ -1,0 +1,14 @@
+---
+    - name: Diff configuration
+      arista.eos.eos_config:
+        src: "{{ intended_config }}"
+        replace: config
+      register: diff_output
+      diff: true
+      check_mode: True
+
+    - name: Save diff as artifacts
+      copy:
+        content: "{{ diff_output.diff.prepared }}"
+        dest: "{{ diff_file }}"
+      when: diff_output.changed

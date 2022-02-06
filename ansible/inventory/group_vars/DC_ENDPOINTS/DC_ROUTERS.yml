@@ -1,0 +1,9 @@
+---
+routers:
+  gw1:
+    adapters:
+      - endpoint_ports: [Ethernet1, Ethernet2]
+        switches: [clab-walk-wan1a, clab-walk-wan1b]
+        switch_ports: [Ethernet5, Ethernet5]
+        vlans: 10-13
+        profile: core_trunk

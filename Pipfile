@@ -5,8 +5,15 @@ name = "pypi"
 
 [packages]
 ansible = "*"
+pybatfish = "*"
+docker = "*"
+netaddr = "*"
+robotframework = "*"
+robotframework-sshlibrary = "*"
 
 [dev-packages]
+jupyter = "*"
+notebook = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,0 +1,16 @@
+---
+
+- name: Deploy configuration - JUNOS
+  junipernetworks.junos.junos_config:
+    confirm: 5
+    src: "{{ deploy_cfg }}"
+    src_format: set
+  register: junos_update
+
+- name: Confirm configuration
+  junipernetworks.junos.junos_config:
+    confirm_commit: yes
+  when: 
+    - not ansible_check_mode
+    - junos_update.changed
+

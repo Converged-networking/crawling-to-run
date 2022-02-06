@@ -1,0 +1,16 @@
+{% if switch.mlag is arista.avd.defined(true) %}
+{%     include 'mlag/spanning-tree.j2' %}
+
+{%     include 'mlag/vlans.j2' %}
+
+{%     include 'override_templates/mlag/vlan-interfaces.j2' %}
+
+{%     include 'override_templates/mlag/port-channel-interfaces.j2' %}
+
+{%     include 'override_templates/mlag/ethernet-interfaces.j2' %}
+
+{%     include 'override_templates/mlag/mlag-configuration.j2' %}
+
+{%     include 'mlag/route-maps.j2' %}
+
+{% endif %}

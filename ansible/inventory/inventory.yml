@@ -1,46 +1,70 @@
 all:
+
   children:
+    dc_lab:
+      vars:
+        inventory: dc_lab
+        root_dir: "{{ playbook_dir }}/../live"
+
+        # Connection details
+        ansible_user: "admin"
+        ansible_password: "admin"
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_network_os: arista.eos.eos
+        ansible_become: True
+
+      children:
+        dc_lab_spine:
+          hosts:
+            clab-walk-spine1:
+              ansible_host: 172.20.20.6
+            clab-walk-spine2:
+              ansible_host: 172.20.20.7
+          vars:
+            type: spine
+
+        dc_lab_l3leaf:
+          hosts:
+            clab-walk-wan1a:
+              ansible_host: 172.20.20.11
+            clab-walk-wan1b:
+              ansible_host: 172.20.20.12
+          vars:
+            type: l3leaf
+
+        dc_lab_bridge_leaf:
+          hosts:
+            clab-walk-leaf1a:
+              ansible_host: 172.20.20.21
+            clab-walk-leaf1b:
+              ansible_host: 172.20.20.22
+          vars:
+            type: bridge_leaf
+
+    automated:
+      children:
+        dc_lab:
+
+    DC_ENDPOINTS:
+      children:
+        dc_lab_l3leaf:
+        dc_lab_bridge_leaf:
+
+    DC_SERVICES:
+      children:
+        dc_lab_l3leaf:
+        dc_lab_bridge_leaf:
+
     ceos:
       hosts:
         clab-walk-gw1:
-          ansible_host: 172.20.20.5
-        clab-walk-leaf1a:
-          ansible_host: 172.20.20.21
-        clab-walk-leaf1b:
-          ansible_host: 172.20.20.22
-        clab-walk-spine1:
-          ansible_host: 172.20.20.6
-        clab-walk-spine2:
-          ansible_host: 172.20.20.7
-        clab-walk-wan1a:
-          ansible_host: 172.20.20.11
-        clab-walk-wan1b:
-          ansible_host: 172.20.20.12
+          ansible_host: 172.20.20.2
+
     linux:
       hosts:
         clab-walk-client1:
-          ansible_host: 172.20.20.3
+          ansible_host: 172.20.20.200
         clab-walk-client2:
-          ansible_host: 172.20.20.4
+          ansible_host: 172.20.20.201
         clab-walk-client3:
-          ansible_host: 172.20.20.2
-    gw:
-      hosts:
-        clab-walk-gw1:
-          ansible_host: 172.20.20.5
-    leaf:
-      hosts:
-        clab-walk-leaf1a:
-          ansible_host: 172.20.20.21
-        clab-walk-leaf1b:
-          ansible_host: 172.20.20.22
-        clab-walk-wan1a:
-          ansible_host: 172.20.20.11
-        clab-walk-wan1b:
-          ansible_host: 172.20.20.12
-    spine:
-      hosts:
-        clab-walk-spine1:
-          ansible_host: 172.20.20.6
-        clab-walk-spine2:
-          ansible_host: 172.20.20.7
+          ansible_host: 172.20.20.202

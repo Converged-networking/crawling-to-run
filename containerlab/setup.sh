@@ -29,3 +29,6 @@ for p in $PIDS; do
   fi
 done
 echo
+
+
+cp clab-walk/ansible-inventory.yml ../ansible/inventory/inventory.yml

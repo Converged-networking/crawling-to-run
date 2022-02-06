@@ -1,0 +1,20 @@
+---
+- name: "Cleanup folder: {{ diff_dir_name }}"
+  file:
+    path: "{{ diff_dir }}"
+    state: absent
+  delegate_to: localhost
+  run_once: true
+
+- name: "Create folder: {{ diff_dir_name }}"
+  file:
+    path: "{{ diff_dir }}"
+    state: directory
+    mode: 0755
+  delegate_to: localhost
+  run_once: true
+
+- include_tasks: "diff/{{ ansible_network_os }}.yml"
+  when : 
+    - not ansible_check_mode
+    - ansible_network_os is defined

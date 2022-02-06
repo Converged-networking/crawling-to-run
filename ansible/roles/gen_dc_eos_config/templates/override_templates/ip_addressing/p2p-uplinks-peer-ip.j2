@@ -1,0 +1,1 @@
+{{ hostvars[inventory_hostname][type].node_groups[switch.group].nodes[inventory_hostname].uplink_prefixes[uplink_switch_index] | ansible.netcommon.ipaddr('peer') }}/{{ hostvars[inventory_hostname][type].node_groups[switch.group].nodes[inventory_hostname].uplink_prefixes[uplink_switch_index] | ansible.netcommon.ipaddr('prefix') }}

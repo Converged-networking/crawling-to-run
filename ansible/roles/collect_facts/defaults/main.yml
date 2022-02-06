@@ -1,5 +1,0 @@
----
-backup_dir: "{{ inventory_dir }}/config_backup"
-
-# Output data
-src_config: "{{ backup_dir }}/{{ inventory_hostname }}.cfg"

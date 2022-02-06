@@ -1,0 +1,9 @@
+---
+- name: Perform pre-checks
+  hosts: automated
+
+
+  roles:
+
+    - role: batfish
+      tags: ['pre']

@@ -1,0 +1,37 @@
+---
+fabric_name: dc_lab
+
+# Point to Point Links MTU | Required.
+p2p_uplinks_mtu: 1400
+
+# IP Address used as Virtual VTEP. Will be configured as secondary IP on loopback1 | Optional
+# This is only needed for centralized routing designs
+vtep_vvtep_ip: 10.0.4.1/32
+
+# Adjust default bfd values, to avoid high CPU on cEOS / vEOS.
+bfd_multihop:
+  interval: 1200
+  min_rx: 1200
+  multiplier: 3
+
+# local users
+local_users:
+  # Username with a password
+  admin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$1OOyGO.NDT3rc7OD$fT2YyrEZV/Bxx6K2mm/J55ZDbWWuNb/p.tNhMOna73zch7IRsbAUD25fQFA3LEpBY8RH/QvZ.ET.cd930gbHF."
+
+# OOB Management network default gateway.
+mgmt_interface_vrf: mgmt
+mgmt_gateway: 172.20.20.1
+management_interface: Management0
+mgmt_destination_networks:
+  - 0.0.0.0/0
+
+custom_structured_configuration_management_ssh:
+  idle_timeout: 30
+  enable: false
+  vrfs:
+    mgmt:
+      enable: true

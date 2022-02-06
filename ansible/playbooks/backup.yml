@@ -1,0 +1,11 @@
+---
+- name: Backup configs
+  hosts: automated
+
+
+  roles:
+
+    - role: net_deploy
+      tags: ['backup']
+      vars:
+        net_deploy_action: backup

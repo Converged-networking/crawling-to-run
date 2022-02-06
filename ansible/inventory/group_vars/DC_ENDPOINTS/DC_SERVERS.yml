@@ -1,0 +1,26 @@
+---
+servers:
+  client1:
+    service: test
+    adapters:
+      - endpoint_ports: [eth1]
+        switches: [clab-walk-leaf1a]
+        switch_ports: [Ethernet5]
+        vlans: 11
+        profile: single_access
+  client2:
+    service: test
+    adapters:
+      - endpoint_ports: [ eth1, eth2 ]
+        switch_ports: [ Ethernet6, Ethernet6 ]
+        switches: [clab-walk-leaf1a, clab-walk-leaf1b]
+        vlans: 12
+        profile: mlag_access
+  client3:
+    service: test
+    adapters:
+      - endpoint_ports: [eth1]
+        switches: [clab-walk-leaf1b]
+        switch_ports: [Ethernet5]
+        vlans: 13
+        profile: single_access

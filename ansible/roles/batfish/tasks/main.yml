@@ -1,0 +1,24 @@
+---
+
+- include_tasks: batfish_docker_start.yml
+  run_once: True
+  args:
+    apply:
+      delegate_to: localhost
+
+- include_tasks: create_snapshot.yml
+  args:
+    apply:
+      delegate_to: localhost
+
+- include_tasks: batfish_analysis.yml
+  run_once: True
+  args:
+    apply:
+      delegate_to: localhost
+
+- include_tasks: batfish_docker_stop.yml
+  run_once: True
+  args:
+    apply:
+      delegate_to: localhost

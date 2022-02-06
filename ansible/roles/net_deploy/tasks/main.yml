@@ -1,0 +1,2 @@
+---
+- include_tasks: "{{ net_deploy_action }}.yml"

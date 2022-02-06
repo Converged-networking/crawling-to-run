@@ -1,0 +1,1 @@
+{{ (switch_data.combined.mlag_peer_l3_ipv4_pool + hostvars[inventory_hostname][type].node_groups[switch_data.group].mlag_ip_primary.split('.')[-1]) | ansible.netcommon.ipaddr('peer') }}/{{ hostvars[inventory_hostname][type].node_groups[switch_data.group].mlag_ip_primary | ansible.netcommon.ipaddr('prefix') }}

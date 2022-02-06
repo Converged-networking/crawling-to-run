@@ -1,0 +1,23 @@
+---
+tenants:
+  default:
+    mac_vrf_vni_base: 0
+    vrfs:
+      default:
+        vrf_vni: 0
+        svis:
+          13:
+            name: Tenant_A_APP_Zone_1
+            tags: [ nfs ]
+            enabled: true
+            ip_address_virtual: 10.0.13.1/24
+    l2vlans:
+      11:
+        name: Tenant_A_NFS
+        tags: [ nfs ]
+      12:
+        name: Tenant_A_NFS
+        tags: [ nfs ]
+      13:
+        name: Tenant_A_NFS
+        tags: [ nfs ]

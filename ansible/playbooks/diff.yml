@@ -1,6 +1,11 @@
 ---
-- name: Run project
-  hosts: ceos
+- name: Diff configs
+  hosts: automated
+
 
   roles:
-    - name: diff
+
+    - role: net_deploy
+      tags: ['diff']
+      vars:
+        net_deploy_action: diff

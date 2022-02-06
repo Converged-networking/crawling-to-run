@@ -1,11 +1,9 @@
 ---
-- name: Run project
-  hosts: ceos
+- name: Build configuration
+  hosts: automated
+
 
   roles:
-    - name: transform_config
-      vars: 
-        transform_action: split
-    - name: transform_config
-      vars: 
-        transform_action: rebuild
+
+    - role: gen_dc_eos_config
+      tags: ['build']
