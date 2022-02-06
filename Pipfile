@@ -7,6 +7,9 @@ name = "pypi"
 ansible = "*"
 pybatfish = "*"
 docker = "*"
+netaddr = "*"
+robotframework = "*"
+robotframework-sshlibrary = "*"
 
 [dev-packages]
 jupyter = "*"

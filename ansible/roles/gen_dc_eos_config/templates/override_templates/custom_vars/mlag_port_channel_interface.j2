@@ -1,0 +1,1 @@
+{{ hostvars[inventory_hostname][type].node_groups[switch.mlag_group].mlag_port_channel_interface | default(hostvars[inventory_hostname][type].defaults.mlag_port_channel_interface) }}

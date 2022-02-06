@@ -1,0 +1,24 @@
+---
+# Root directory where to build output structure
+root_dir: "{{ playbook_dir }}/../live"
+
+# Location of backups, used for generation and rollback
+backup_dir_name: backup
+backup_dir: "{{ root_dir }}/{{ backup_dir_name }}"
+backup_config_name: "backup-{{ inventory_hostname }}.cfg"
+backup_config: "{{ backup_dir }}/{{ backup_config_name }}"
+
+# Location of generated diffs
+diff_dir_name: diff
+diff_dir: "{{ root_dir }}/{{ diff_dir_name }}"
+diff_file_name: "{{ inventory_hostname }}.diff"
+diff_file: "{{ diff_dir }}/{{ diff_file_name }}"
+
+# Location of the intended configuration
+intended_dir_name: intended/configs
+indended_dir: "{{ root_dir }}/{{ intended_dir_name }}"
+intended_config_name: "{{ inventory_hostname }}.cfg"
+intended_config: "{{ indended_dir }}/{{ intended_config_name }}"
+
+# By default this role runs a diff, override to backup, deploy or rollback
+net_deploy_action: diff

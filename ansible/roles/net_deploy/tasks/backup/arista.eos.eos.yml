@@ -1,0 +1,7 @@
+---
+- name: Backup configuration - EOS
+  arista.eos.eos_config:
+    backup: yes
+    backup_options:
+      filename: "{{ backup_config_name }}"
+      dir_path: "{{ backup_dir }}"

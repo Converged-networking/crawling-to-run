@@ -1,0 +1,47 @@
+- name: "Cleanup folder: {{ snapshot_dir_name }}"
+  file:
+    path: "{{ snapshot_dir }}"
+    state: absent
+  delegate_to: localhost
+  run_once: true
+
+- name: "Create snapshot dirs"
+  changed_when: False
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  delegate_to: localhost
+  run_once: true
+  loop:
+    - "{{ snapshot_dir }}"
+    - "{{ snapshot_dir }}/configs"
+    - "{{ snapshot_dir }}/hosts"
+    - "{{ snapshot_dir }}/iptables"
+
+- name: "Save live config to snapshot"
+  delegate_to: localhost
+  changed_when: False
+  ansible.builtin.copy:
+    src: "{{ intended_config }}"
+    dest: "{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg"
+
+- name: "Copy extra configs to snapshot"
+  changed_when: False
+  delegate_to: localhost
+  run_once: True
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ snapshot_dir }}/configs/"
+  loop: "{{ extra_configs }}"
+  when:
+    - extra_configs is defined
+
+- name: Save host files to snapshot
+  changed_when: False
+  delegate_to: localhost
+  run_once: true
+  ansible.builtin.copy:
+    content: "{{ item | to_nice_json }}"
+    dest: "{{ snapshot_dir }}/hosts/{{ item.hostname }}.json"
+  loop: "{{ extra_hosts }}"

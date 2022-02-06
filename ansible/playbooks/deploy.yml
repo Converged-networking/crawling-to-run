@@ -1,8 +1,21 @@
 ---
-- hosts: all:!clab-walk-gw1
+- name: Deploy configs
+  hosts: automated
+  any_errors_fatal: true
 
 
-   roles:
+  tasks:
+    - block:
+      - name: Deploy configs using net_deploy
+        import_role: 
+          name: net_deploy
+        tags: ['deploy']
+        vars:
+          net_deploy_action: deploy
 
-    - role: deploy
-      tags: ['deploy']
+      rescue:
+        - set_fact:
+            rollback: True
+          delegate_to: localhost
+          delegate_facts: True
+          run_once: True

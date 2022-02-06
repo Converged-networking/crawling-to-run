@@ -1,0 +1,14 @@
+---
+# Spine Switches
+spine:
+  defaults:
+    # GENERIC
+    platform: ceos
+
+  nodes:
+    clab-walk-spine1:
+      id: 1
+      mgmt_ip: 172.20.20.6/24
+    clab-walk-spine2:
+      id: 2
+      mgmt_ip: 172.20.20.7/24

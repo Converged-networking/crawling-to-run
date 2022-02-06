@@ -1,7 +1,0 @@
----
-- name: Verify NTP status
-  arista.eos.eos_command:
-    commands: show ntp associations | json
-    wait_for: 
-    - result[0].peers['dcd-b9-ntp01.directory.intra'].refid eq '.GNSS.'
-    - result[0].peers['htr-r04-ntp01'].refid eq '.GNSS.'

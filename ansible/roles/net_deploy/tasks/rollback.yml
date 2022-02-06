@@ -1,0 +1,9 @@
+---
+- name: Set facts for ROLLBACK
+  ansible.builtin.set_fact:
+    deploy_cfg: "{{ backup_config }}"
+
+- name: Include tasks to deploy BACKUP config
+  include_tasks: "deploy/{{ ansible_network_os }}.yml"
+  when : 
+    - ansible_network_os is defined

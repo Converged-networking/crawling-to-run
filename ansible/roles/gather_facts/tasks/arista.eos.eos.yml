@@ -1,6 +1,0 @@
----
-- name: Gather only the config and default facts
-  arista.eos.eos_facts:
-    gather_subset:
-    - config
-  register: facts_output

@@ -3,7 +3,7 @@
 # python virtual env
 .venv
 # directory for playbook temp files
-ansible/playbooks/live
+ansible/live
 # Temp file used by containerlab
 .*clab.yaml
 

@@ -1,0 +1,22 @@
+{# tenant vlans #}
+vlans:
+{% for tenant in network_services_data.tenants %}
+{%     for vrf in tenant.vrfs %}
+{# Tenant VLANs w/SVIs #}
+{%         for svi in vrf.svis %}
+{%             if svi.id | int in topology.vlans %}
+  {{ svi.id | int }}:
+    tenant: {{ tenant.name }}
+    name: {{ svi.name }}
+{%             endif %}
+{%         endfor %}
+{%     endfor %}
+{# Tenant L2 VLANs #}
+{%     for l2vlan in tenant.l2vlans %}
+{%         if l2vlan.id | int in topology.vlans %}
+  {{ l2vlan.id | int }}:
+    tenant: {{ tenant.name }}
+    name: {{ l2vlan.name }}
+{%         endif %}
+{%     endfor %}
+{% endfor %}

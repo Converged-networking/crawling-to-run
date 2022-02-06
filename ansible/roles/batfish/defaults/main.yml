@@ -1,0 +1,39 @@
+# Root directory where to build output structure
+root_dir: "{{ playbook_dir }}/../live"
+
+# Location of the intended configuration
+intended_dir_name: intended/configs
+indended_dir: "{{ root_dir }}/{{ intended_dir_name }}"
+intended_config_name: "{{ inventory_hostname }}.cfg"
+intended_config: "{{ indended_dir }}/{{ intended_config_name }}"
+
+# Location of the snapshot
+snapshot_dir_name: snapshot
+snapshot_dir: "{{ root_dir }}/{{ snapshot_dir_name }}"
+
+# Batfish settings
+snapshot_name: intended_snapshot
+
+# Define hosts to add to snapshot
+extra_hosts:
+  - hostname: client1
+    hostInterfaces:
+      eth1:
+        name: eth1
+        prefix: 10.0.11.5/24
+        gateway: 10.0.11.1
+  - hostname: client2
+    hostInterfaces:
+      bond0:
+        name: bond0
+        prefix: 10.0.12.5/24
+        gateway: 10.0.12.1
+  - hostname: client3
+    hostInterfaces:
+      eth1:
+        name: eth1
+        prefix: 10.0.13.5/24
+        gateway: 10.0.13.1
+
+extra_configs:
+  - "{{ playbook_dir }}/../../containerlab/startup-configs/gw1.cfg"

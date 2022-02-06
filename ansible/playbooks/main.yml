@@ -1,16 +1,22 @@
 ---
-- hosts: all:!clab-walk-gw1
 
+- name: Build configuration
+  import_playbook: build.yml
 
-  tasks:
-    - name: Build configuration
-      import_playbook: build.yml
+- name: Perform pre checks
+  import_playbook: pre.yml
 
-    - name: Do pre checks
-      import_playbook: pre.yml
+- name: Diff configs
+  import_playbook: diff.yml
 
-    - name: Deploy configuration
-      import_playbook: deploy.yml
+- name: Backup configuration
+  import_playbook: backup.yml
 
-    - name: Verify deployment and save
-      import_playbook: post.yml
+- name: Deploy configuration
+  import_playbook: deploy.yml
+
+- name: Rollback configuration
+  import_playbook: rollback.yml
+  when: 
+    - hostvars['localhost']['rollback'] is defined
+    - hostvars['localhost']['rollback'] == True

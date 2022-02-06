@@ -4,11 +4,17 @@ All over documentation of network automation.
 
 ## Requirements
 
-- Stub
+- docker
+- arista.avd
+- python
+- batfish
+- ansible
 
 ## Roles
 
-- [collect_facts:](roles/collect_facts/README.md) Collect config to use as a base in following roles
+- [batfish:](roles/collect_facts/README.md)
+- [gen_dc_eos_config:](roles/gen_dc_eos_config/README.md)
+- [net_deploy:](roles/net_deploy/README.md)
 
 ## Run
 

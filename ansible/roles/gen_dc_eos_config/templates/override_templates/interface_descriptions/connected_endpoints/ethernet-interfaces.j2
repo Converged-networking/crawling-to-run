@@ -1,0 +1,10 @@
+{% if adapter_settings.type == 'core' %}
+{{ adapter_settings.type }}: {{ peer }} {{ peer_interface }}
+{% elif adapter_settings.type == 'cust' %}
+{{ adapter_settings.type }}: {{ connected_endpoints[endpoint_key][connected_endpoint].service }} ({{ peer }} {{ peer_interface }})
+{% elif adapter_settings.type == 'reserved' %}
+{{ adapter_settings.type }}: {{ connected_endpoints[endpoint_key][connected_endpoint].service }} ({{ peer }} {{ peer_interface }})
+{% else %}
+{# Force error on unknown adapter type #}
+{{ 0/0 }} 
+{% endif %}

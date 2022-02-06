@@ -1,8 +1,9 @@
 ---
-- hosts: all:!clab-walk-gw1
+- name: Build configuration
+  hosts: automated
 
 
   roles:
 
-    - role: generate_configs
+    - role: gen_dc_eos_config
       tags: ['build']

@@ -1,0 +1,7 @@
+---
+
+- name: Deploy configuration - EOS
+  arista.eos.eos_config:
+    src: "{{ deploy_cfg }}"
+    replace: config
+    save_when: never

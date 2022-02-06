@@ -1,0 +1,9 @@
+{% if switch.node_type_key in ('l3leaf', 'bridge_leaf')  %}
+{%      set flood_vtep = [vtep_vvtep_ip.split('/').0] %}
+{%      for hostname in hostvars %}
+{%          if hostvars[hostname].switch.vtep is arista.avd.defined(true) %}
+{%              do flood_vtep.append(hostvars[hostname].switch.vtep_ip) %}
+{%          endif %}
+{%      endfor %}
+flood_vtep: {{ flood_vtep | arista.avd.natural_sort | unique }}
+{% endif %}

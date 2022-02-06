@@ -1,0 +1,58 @@
+---
+port_profiles:
+
+  reserved:
+    type: reserved
+    mode: access
+    vlan: 4000
+    mlag: false
+    shutdown: true
+    native_vlan: 1
+    spanning_tree_portfast: edge
+
+  core_trunk:
+    type: core
+    mode: trunk
+    native_vlan: 1
+    shutdown: False
+    port_channel:
+      description: bond
+      mode: active
+
+  mlag:
+    type: cust
+    native_vlan: 1
+    shutdown: False
+    port_channel:
+      description: bond
+      mode: active
+      lacp_fallback:
+        mode: static
+        timeout: 5
+
+  single_access:
+    type: cust
+    mode: access
+    mlag: False
+    native_vlan: 1
+    shutdown: False
+    spanning_tree_portfast: edge
+
+  single_trunk:
+    type: cust
+    mode: trunk
+    mlag: False
+    native_vlan: 1
+    shutdown: False
+    spanning_tree_portfast: edge
+
+  mlag_access:
+    parent_profile: mlag
+    mode: access
+    spanning_tree_portfast: edge
+
+
+  mlag_trunk:
+    parent_profile: mlag
+    mode: trunk
+    spanning_tree_portfast: edge

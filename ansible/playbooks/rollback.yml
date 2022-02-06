@@ -1,0 +1,11 @@
+---
+- name: Rollback devices to last backup
+  hosts: automated
+
+
+  roles:
+
+    - role: net_deploy
+      tags: ['rollback']
+      vars:
+        net_deploy_action: rollback

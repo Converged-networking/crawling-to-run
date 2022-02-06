@@ -1,37 +1,9 @@
 ---
-- hosts: all
-
-
-  pre_tasks:
-    - include_tasks: tasks/batfish_docker_start.yml
+- name: Perform pre-checks
+  hosts: automated
 
 
   roles:
-    - batfish.base
 
-  tasks:
-
-    - include_tasks: tasks/create_current_snapshot.yml
-      vars:
-        root_dir: "{{ playbook_dir }}/live/batfish"
-
-    - include_tasks: tasks/create_intended_snapshot.yml
-      vars:
-        src_snapshot_dir: "{{ playbook_dir }}/live/batfish/current"
-        intended_snapshot_dir: "{{ playbook_dir }}/live/batfish/intended"
-        intended_config: "{{ inventory_dir }}/intended/config/{{ inventory_hostname }}.conf"
-
-    - include_tasks: tasks/batfish_analysis.yml
-      vars:
-        snapshot_name: current_snapshot
-        snapshot_dir: "{{ playbook_dir }}/live/batfish/current"
-
-    - include_tasks: tasks/batfish_analysis.yml
-      vars:
-        snapshot_name: intended_snapshot
-        snapshot_dir: "{{ playbook_dir }}/live/batfish/intended"
-
-
-  post_tasks:
-
-    - include_tasks: tasks/batfish_docker_stop.yml
+    - role: batfish
+      tags: ['pre']

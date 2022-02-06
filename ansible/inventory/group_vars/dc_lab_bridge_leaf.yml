@@ -1,0 +1,85 @@
+---
+bridge_leaf:
+  defaults:
+    # GENERIC
+    platform: ceos
+
+    # UPLINK
+    ## IPv4 subnet to use to connect to uplink switches.
+    uplink_ipv4_pool: 10.0.0.0/24
+    ## Local uplink interfaces (list). | Required.
+    uplink_interfaces: [Ethernet1, Ethernet2]
+    ## Uplink switches (list). | Required.
+    uplink_switches: [clab-walk-spine1, clab-walk-spine2]
+    ## Point-to-Point interface speed - will apply to uplinks on both ends | Optional.
+    uplink_interface_speed: forced 1000full
+
+    # LOOPBACK AND VTEP
+    ## IPv4 subnet for VTEP/Loopback1 allocation.
+    vtep_loopback_ipv4_pool: 10.0.4.0/24
+    ## Offset all assigned loopback IP addresses.
+    loopback_ipv4_offset: 2
+    ## Set VXLAN source interface. Loopback1 is default
+    vtep_loopback: Loopback1
+
+    # MLAG CONFIGURATION
+    ## Enable / Disable auto MLAG, when two nodes are defined in node group.
+    mlag: true
+    ## Enable / Disable MLAG dual primary detection
+    mlag_dual_primary_detection: false
+    ## MLAG interfaces (list) | Required when MLAG leafs present in topology.
+    mlag_interfaces: [Ethernet3, Ethernet4]
+    ## MLAG interfaces speed | Optional and depends on mlag_interfaces to be defined
+    mlag_interfaces_speed: forced 1000full
+    ## Underlay L3 peering SVI interface id
+    ## If set to false or the same vlan as mlag_peer_vlan the mlag_peer_vlan will be used for L3 peering.
+    mlag_peer_l3_vlan: 4093
+    ## IP address pool used for MLAG underlay L3 peering | *Required when MLAG leafs present in topology.
+    ## IP is derived from the node id.
+    mlag_peer_l3_ipv4_pool: 10.0.2.
+    ## MLAG Peer Link (control link) SVI interface id
+    mlag_peer_vlan: 4094
+    ## MLAG Peer Link allowed VLANs
+    mlag_peer_link_allowed_vlans: "2-4094"
+    ## IP address pool used for MLAG Peer Link (control link)| *Required when MLAG leafs present in topology.
+    ## IP is derived from the node id.
+    mlag_peer_ipv4_pool: 10.0.1.0/24
+    ## Spanning tree mode | Required.
+    spanning_tree_mode: mstp
+    ## Spanning tree priority.
+    spanning_tree_priority: 32768
+
+    # CUSTOM
+    mlag_port_channel_interface: 1
+
+    structured_config:
+      router_ospf:
+        process_ids:
+          1:
+            maximum_paths: 32
+            redistribute:
+              connected:
+
+  node_groups:
+    leaf1:
+      mlag_ip_primary: 10.0.1.2/31
+      vtep: 10.0.4.6
+      nodes:
+        clab-walk-leaf1a:
+          # GENERIC
+          id: 3
+          mgmt_ip: 172.20.20.21/24
+
+          # UPLINK
+          ## Uplink switches interfaces (list), interface located on uplink switch. | Required.
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
+          uplink_prefixes: [10.0.0.9/31, 10.0.0.11/31]
+        clab-walk-leaf1b:
+          # GENERIC
+          id: 4
+          mgmt_ip: 172.20.20.22/24
+
+          # UPLINK
+          ## Uplink switches interfaces (list), interface located on uplink switch. | Required.
+          uplink_switch_interfaces: [Ethernet4, Ethernet4]
+          uplink_prefixes: [10.0.0.13/31, 10.0.0.15/31]

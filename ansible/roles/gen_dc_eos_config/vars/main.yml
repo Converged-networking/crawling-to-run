@@ -1,0 +1,108 @@
+---
+# Design variables
+design:
+  type: "l3ls-ospf-vxlan"
+
+node_type_keys:
+  spine:
+    type: spine
+  l3leaf:
+    type: l3leaf
+    connected_endpoints: true
+    mlag_support: true
+    network_services:
+      l2: true
+      l3: true
+    vtep: true
+  bridge_leaf:
+    type: bridge_leaf
+    connected_endpoints: true
+    mlag_support: true
+    network_services:
+      l2: true
+      l3: false
+    vtep: true
+  H6_leaf:
+    type: H6_leaf
+    connected_endpoints: true
+    mlag_support: true
+    network_services:
+      l2: false
+      l3: false
+    vtep: false
+
+# Templates used by AVD eos_designs role
+templates:
+  facts:
+    # Set "switch.*" variables based on node type
+    - template: "facts/node_type/main.j2"
+    # Set general "switch.*" variables
+    - template: "override_templates/facts/switch/main.j2"
+  topology_facts:
+    # Set design specific "topology.*" variables
+    - template: "facts/topology/main.j2"
+    - template: "override_templates/facts/calc_flood_vtep.j2"
+  structured_config:
+    # Render Structured Configuration
+    # Base features
+    - template: "override_templates/base/main.j2"
+    # MLAG feature
+    - template: "override_templates/mlag/main.j2"
+    # Underlay feature
+    - template: "override_templates/underlay/main.j2"
+    # # Overlay feature
+    # - template: "overlay/main.j2"
+    # L3 Edge feature
+    - template: "l3_edge/main.j2"
+    # Tenants feature
+    - template: "override_templates/network_services/main.j2"
+    # Connected Endpoints feature
+    - template: "override_templates/connected_endpoints/main.j2"
+    # Inband Management feature
+    - template: "inband_management/main.j2"
+    # Merge custom_structured_configuration last
+    - template: "custom_structured_configuration/main.j2"
+      options:
+        list_merge: "{{ custom_structured_configuration_list_merge }}"
+        strip_empty_keys: false
+  ip_addressing:
+    router_id: 'override_templates/ip_addressing/router-id.j2'
+    mlag_ip_primary: 'override_templates/ip_addressing/mlag-ip-primary.j2'
+    mlag_ip_secondary: 'override_templates/ip_addressing/mlag-ip-secondary.j2'
+    mlag_l3_ip_primary: 'override_templates/ip_addressing/mlag-l3-ip-primary.j2'
+    mlag_l3_ip_secondary: 'override_templates/ip_addressing/mlag-l3-ip-secondary.j2'
+    p2p_uplinks_ip: 'override_templates/ip_addressing/p2p-uplinks-ip.j2'
+    p2p_uplinks_peer_ip: 'override_templates/ip_addressing/p2p-uplinks-peer-ip.j2'
+    vtep_ip_mlag: 'override_templates/ip_addressing/vtep-ip-mlag.j2'
+    vtep_ip: 'override_templates/ip_addressing/vtep-ip.j2'
+
+  interface_descriptions:
+    underlay_ethernet_interfaces: 'override_templates/interface_descriptions/underlay/ethernet-interfaces.j2'
+    underlay_port_channel_interfaces: 'override_templates/interface_descriptions/underlay/port-channel-interfaces.j2'
+    mlag_ethernet_interfaces: 'override_templates/interface_descriptions/mlag/ethernet-interfaces.j2'
+    mlag_port_channel_interfaces: 'override_templates/interface_descriptions/mlag/port-channel-interfaces.j2'
+    connected_endpoints_ethernet_interfaces: 'override_templates/interface_descriptions/connected_endpoints/ethernet-interfaces.j2'
+    connected_endpoints_port_channel_interfaces: 'override_templates/interface_descriptions/connected_endpoints/port-channel-interfaces.j2'
+    overlay_loopback_interface: 'override_templates/interface_descriptions/loopback_interfaces/overlay-loopback.j2'
+    vtep_loopback_interface: 'override_templates/interface_descriptions/loopback_interfaces/vtep-loopback.j2'
+
+  custom_vars:
+    endpoint_channel_group_id: 'override_templates/custom_vars/endpoint_channel_group_id.j2'
+    mlag_port_channel_interface: 'override_templates/custom_vars/mlag_port_channel_interface.j2'
+
+
+underlay_routing_protocol: OSPF
+underlay_ospf_process_id: 1
+underlay_ospf_area: 0.0.0.0
+underlay_ospf_max_lsa: 12000
+underlay_ospf_bfd_enable: true
+
+# Disable IGMP snooping at fabric level.
+# If set, it overrides per vlan settings
+default_igmp_snooping_enabled: true 
+
+internal_vlan_order:
+  allocation: "ascending"
+  range:
+    beginning: 1006
+    ending: 4094

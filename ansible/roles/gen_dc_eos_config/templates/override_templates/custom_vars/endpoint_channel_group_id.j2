@@ -1,0 +1,1 @@
+{{ adapter_settings.channel_group_id | default(adapter.switch_ports[0] | regex_findall("\d") | join) }}
