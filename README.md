@@ -1,3 +1,7 @@
+# DO NOT USE
+
+This repo is read only and I've archived this for personal use.
+
 # Crawling to run
 
 My virtual lab environment to test (net)devops workflows, using utilities like:
